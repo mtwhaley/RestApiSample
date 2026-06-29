@@ -6,5 +6,7 @@ namespace RestApiSample.Application.Abstractions
     {
         Task<IEnumerable<MyMovie>> GetMyMovies();
         Task<IEnumerable<Movie>> GetRandomMovies();
+        Task<IEnumerable<Movie>> SearchMovies(MovieQuery movieQuery);
+
     }
 }

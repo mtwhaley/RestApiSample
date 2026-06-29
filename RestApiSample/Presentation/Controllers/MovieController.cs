@@ -23,5 +23,11 @@ namespace RestApiSample.Presentation.Controllers
         {
             return await _movieService.GetMyMovies();
         }
+        [HttpGet, Route("search")]
+        public async Task<IEnumerable<Movie>> Search([FromQuery]string? title = null)
+        {
+
+            return await _movieService.SearchMovies(new Application.MovieQuery(title));
+        }
     }
 }

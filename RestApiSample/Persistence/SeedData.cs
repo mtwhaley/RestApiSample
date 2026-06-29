@@ -10,24 +10,26 @@ namespace RestApiSample.Persistence
 
         public static void Initialize(MovieContext context)
         {
-            if (context.MyMovies.Any())
-                return;
+            //if (context.MyMovies.Any())
+            //    return;
+            context.MyMovies.RemoveRange(context.MyMovies);
+
             context.MyMovies.AddRange(
             new MyMovie
             {
-                MovieId = 1,
+                MovieId = 155,
                 Status = Movie.Status.Watched,
                 PersonalRating = 10
             },
             new MyMovie
             {
-                MovieId = 2,
+                MovieId = 1124,
                 Status = Movie.Status.Watched,
-                PersonalRating = 9
+                PersonalRating = 10
             },
             new MyMovie
             {
-                MovieId = 3,
+                MovieId = 969681,
                 Status = Movie.Status.WantToWatch,
                 PersonalRating = 0
             });

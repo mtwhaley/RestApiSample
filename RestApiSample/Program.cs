@@ -1,7 +1,9 @@
-using RestApiSample.Persistence;
 using Microsoft.EntityFrameworkCore;
-using RestApiSample.Application.Abstractions;
 using RestApiSample.Application;
+using RestApiSample.Application.Abstractions;
+using RestApiSample.Infrastructure;
+using RestApiSample.Persistence;
+using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,16 @@ builder.Services.AddScoped<IMovieContext>(provider =>
 
 // Add services to the container.
 builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddHttpClient<IMovieLookupService, MovieLookupService>((sp, client) =>
+{
+    var config = sp.GetRequiredService<IConfiguration>();
+
+    client.BaseAddress = new Uri("https://api.themoviedb.org/3/");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+            "Bearer",
+            config["TmdbToken"] ?? throw new ArgumentNullException("TMDB token must be specified."));
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
