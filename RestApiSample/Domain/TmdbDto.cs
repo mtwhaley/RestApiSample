@@ -10,6 +10,8 @@ namespace RestApiSample.Domain
         public string Overview { get; set; } = string.Empty;
         [JsonPropertyName("genres")]
         public List<Genre> Genres { get; set; } = [];
+        [JsonPropertyName("release_date")]
+        public string ReleaseDate { get; set; }
 
         public class Genre
         {

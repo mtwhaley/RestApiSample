@@ -22,6 +22,8 @@ namespace RestApiSample.Domain
             [JsonPropertyName("genre_ids")]
             public List<int> GenreIds { get; set; } = [];
             public List<string> Genres { get; set; } = [];
+            [JsonPropertyName("release_date")]
+            public string ReleaseDate { get; set; }
         }
     }
 }
