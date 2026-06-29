@@ -7,6 +7,7 @@ namespace RestApiSample.Infrastructure
     public class MovieLookupService : IMovieLookupService
     {
         private readonly HttpClient _httpClient;
+        private Dictionary<int, string>? GenreMap { get; set; } = null;
         
         public MovieLookupService(HttpClient httpClient)
         {
@@ -38,9 +39,34 @@ namespace RestApiSample.Infrastructure
 
             var json = await Get(endpoint);
 
-            var result = JsonSerializer.Deserialize<Movie>(json);
+            var result = JsonSerializer.Deserialize<TmdbSearchDto>(json);
 
-            return result == null ? [result] : [];
+            if (result == null) return [];
+
+            if (GenreMap == null) await GetGenreMap();
+
+            foreach (TmdbSearchDto.TmdbSearchResult searchResult in result.Results)
+            {
+                searchResult.Genres = searchResult.GenreIds.Select(gi => GenreMap![gi]).ToList();
+            }
+            
+            List<Movie> movies = result.Results.Select(r => new Movie(r)).ToList();
+
+
+
+            return movies;
+        }
+
+        public async Task GetGenreMap()
+        {
+            string endpoint = "genre/movie/list";
+            string json = await Get(endpoint);
+            var result = JsonSerializer.Deserialize<GenreMapping>(json);
+
+            if (result == null) throw new InvalidOperationException("Unable to parse genre response");
+
+            GenreMap = result.Genres.Select(g => new KeyValuePair<int, string>(g.Id, g.Name)).ToDictionary();
+
         }
     }
 }

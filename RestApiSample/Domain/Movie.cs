@@ -20,5 +20,11 @@
             Description = tmdbDto.Overview;
             Genres = tmdbDto.Genres.Select(g => g.Name).ToList();
         }
+        public Movie(TmdbSearchDto.TmdbSearchResult tmdbSearchResult)
+        {
+            Title = tmdbSearchResult.Title;
+            Description = tmdbSearchResult.Overview;
+            Genres = tmdbSearchResult.Genres;
+        }
     }
 }
